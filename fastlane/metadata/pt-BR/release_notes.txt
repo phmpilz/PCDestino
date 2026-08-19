@@ -1,0 +1,1 @@
+Primeira versão do PCD Destino, com descoberta de locais acessíveis, avaliações colaborativas, favoritos, contribuições e ranking da comunidade.
