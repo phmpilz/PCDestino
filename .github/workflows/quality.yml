@@ -23,7 +23,5 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Check TypeScript
-        run: npm run typecheck
-      - name: Export web build
-        run: npx expo export --platform web --output-dir dist
+      - name: Validate project
+        run: npm run validate

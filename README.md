@@ -2,40 +2,95 @@
 
 ![Logotipo do PCD Destino](docs/assets/logo.png)
 
-Aplicativo colaborativo multiplataforma para encontrar e recomendar locais, serviços públicos e privados com boas condições de acessibilidade.
+Central colaborativa multiplataforma para pessoas com deficiência encontrarem e recomendarem locais, serviços públicos, serviços privados, turismo, lazer e esporte com boas condições de acessibilidade.
 
-## O que já funciona
+## Estado do projeto
 
-- Descoberta de locais e serviços próximos
+O repositório contém um MVP navegável para Android, iOS e web. A interface, a identidade visual, o fluxo de contribuição e a gamificação estão demonstrados com dados locais em memória.
+
+Ainda não existem backend, autenticação, banco de dados, mapas reais, upload de imagens ou moderação. Esses itens estão detalhados em [Produto e próximos desenvolvimentos](documentation/PRODUCT_AND_BACKLOG.md).
+
+## Funcionalidades demonstradas
+
+- Página inicial com localização, categorias e recomendações
 - Busca e filtros por categoria
-- Indicador e recursos de acessibilidade por local
-- Tela detalhada, favoritos e avaliações da comunidade
-- Fluxo de contribuição em três etapas
+- Indicadores e recursos de acessibilidade por local
+- Detalhes, favoritos e avaliações da comunidade
+- Contribuição de locais e serviços em três etapas
 - Pontos, níveis, conquistas e ranking municipal
 - Perfil com histórico e preferências
 - Interface adaptada para Android, iOS e web
-- Identidade visual e assets oficiais para App Store e Google Play
-- Metadados em português do Brasil e páginas de privacidade, termos e suporte
+- Materiais e metadados para App Store e Google Play
+- Páginas públicas de privacidade, termos e suporte
 
-Os dados atuais são demonstrativos e ficam em memória. A arquitetura visual está pronta para ser conectada a autenticação, banco de dados, mapas e moderação.
+## Tecnologias principais
 
-## Executar
+- Expo SDK 54
+- React 19
+- React Native 0.81
+- TypeScript 5.9
+- React Native Web
+- Expo Application Services (EAS) para builds e submissão
+- GitHub Actions para validação e GitHub Pages
 
-Requer Node.js 20.19.4 ou superior.
+Consulte [Tecnologias e dependências](documentation/DEPENDENCIES.md) para versões, responsabilidades e critérios de atualização.
+
+## Início rápido
+
+Requisitos mínimos:
+
+- Node.js `20.19.4` ou superior compatível
+- npm
+- Git
+- Expo Go em um celular, ou um navegador moderno
 
 ```bash
-npm install
+git clone https://github.com/phmpilz/PCDestino.git
+cd PCDestino
+npm ci
 npm start
 ```
 
-Depois, use o QR Code no Expo Go ou escolha Android, iOS ou web no painel do Expo.
+Com o servidor aberto, escaneie o QR Code usando o Expo Go ou pressione `w` para abrir a versão web. Para Android e iOS, consulte [Instalação e execução](documentation/SETUP.md).
 
-## Publicação
+## Comandos principais
 
-O projeto usa EAS Build e possui perfis em `eas.json`. Os textos e imagens das lojas estão em `fastlane/`, enquanto o checklist de informações que dependem das contas Apple e Google está em `store-submission/STORE_CHECKLIST.md`.
+| Comando | Finalidade |
+| --- | --- |
+| `npm start` | Inicia o servidor de desenvolvimento Expo |
+| `npm run android` | Abre no emulador ou dispositivo Android |
+| `npm run ios` | Abre no simulador iOS; exige macOS e Xcode |
+| `npm run web` | Abre no navegador |
+| `npm test` | Executa a suíte automatizada disponível atualmente |
+| `npm run typecheck` | Valida os tipos TypeScript |
+| `npm run check:deps` | Confere a compatibilidade das dependências Expo |
+| `npm run build:web` | Gera o build web de produção em `dist/` |
+| `npm run validate` | Executa todas as verificações usadas na integração contínua |
 
-Todas as mudanças devem passar por pull request. Consulte `CONTRIBUTING.md`.
+## Documentação
 
-## Próxima etapa recomendada
+- [Índice da documentação](documentation/README.md)
+- [Instalação e execução](documentation/SETUP.md)
+- [Arquitetura](documentation/ARCHITECTURE.md)
+- [Tecnologias e dependências](documentation/DEPENDENCIES.md)
+- [Testes e qualidade](documentation/TESTING.md)
+- [Produto e próximos desenvolvimentos](documentation/PRODUCT_AND_BACKLOG.md)
+- [Acessibilidade, privacidade e segurança](documentation/ACCESSIBILITY_AND_PRIVACY.md)
+- [Build, publicação e operação](documentation/RELEASE.md)
+- [Guia de contribuição](CONTRIBUTING.md)
+- [Identidade visual](BRAND.md)
+- [Política de segurança](SECURITY.md)
 
-Conectar um backend com autenticação e geolocalização. As entidades principais são usuários, cidades, locais, contatos/serviços, avaliações, recursos de acessibilidade, denúncias, pontos e conquistas. Avaliações e novos cadastros devem passar por regras de confiança e moderação antes de influenciarem a nota pública.
+## Contribuição
+
+A branch `main` é protegida e todas as mudanças devem passar por Pull Request. Antes de abrir uma PR, execute:
+
+```bash
+npm run validate
+```
+
+Veja o processo completo em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Licença
+
+O projeto ainda não possui uma licença de código definida. Até que uma licença seja adicionada, o conteúdo do repositório permanece protegido pelos direitos autorais de seus titulares. O símbolo universal de acessibilidade possui atribuição própria em [assets/brand/ATTRIBUTION.md](assets/brand/ATTRIBUTION.md).

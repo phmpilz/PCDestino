@@ -11,7 +11,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typecheck": "tsc --noEmit"
+    "test": "npm run typecheck",
+    "typecheck": "tsc --noEmit",
+    "check:deps": "expo install --check",
+    "build:web": "expo export --platform web --output-dir dist",
+    "validate": "npm run check:deps && npm run typecheck && npm run build:web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
