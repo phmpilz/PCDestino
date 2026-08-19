@@ -8,3 +8,12 @@ web-build/
 .env.*
 !.env.example
 assets/brand/logo-master-v*.png
+.vs/
+**/bin/
+**/obj/
+**/TestResults/
+*.user
+*.suo
+*.coverage
+coverage/
+backend/cdk.out/

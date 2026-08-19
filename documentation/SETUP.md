@@ -8,6 +8,8 @@ Instale:
 - Node.js `20.19.4`, versão registrada em `.nvmrc`
 - npm, distribuído com o Node.js
 - Um editor de código com suporte a TypeScript
+- .NET SDK `10.0.400` ou patch compatível
+- Docker Desktop, OrbStack ou outro mecanismo compatível, para backend e testes integrados
 
 O Expo recomenda uma versão LTS do Node.js e oferece suporte a macOS, Windows e Linux. A documentação oficial está em [Create a project](https://docs.expo.dev/get-started/create-a-project/).
 
@@ -17,6 +19,8 @@ Confira o ambiente:
 node --version
 npm --version
 git --version
+dotnet --version
+docker version
 ```
 
 Com `nvm`, a versão correta pode ser selecionada assim:
@@ -36,9 +40,29 @@ npm ci
 
 Use `npm ci` para reproduzir exatamente o `package-lock.json`. `npm install` deve ser usado apenas quando houver intenção de adicionar ou atualizar dependências.
 
-O MVP não exige arquivo `.env`, chaves de API, backend ou conta Expo para funcionar localmente.
+O mobile demonstrativo não exige backend nem conta Expo. Copie `.env.example` somente quando iniciar a integração com a API; ele contém apenas identificadores públicos e nunca deve receber credenciais AWS.
 
-## 3. Iniciar o projeto
+## 3. Iniciar a API e o banco
+
+Com Docker em execução, a partir da raiz:
+
+```bash
+docker compose -f backend/compose.yaml up --build
+```
+
+A API estará em `http://localhost:5205` e o contrato OpenAPI em `http://localhost:5205/openapi/v1.json`. O banco local é inicializado com dados demonstrativos.
+
+A imagem oficial do PostGIS é publicada para `linux/amd64`. Em computadores ARM, o Docker executa essa imagem por emulação; mantenha habilitado o suporte a imagens x86/AMD64.
+
+Para encerrar preservando os dados:
+
+```bash
+docker compose -f backend/compose.yaml down
+```
+
+Consulte [Backend e API](BACKEND.md) para executar diretamente pelo .NET e usar autenticação local.
+
+## 4. Iniciar o aplicativo
 
 ```bash
 npm start
@@ -58,7 +82,7 @@ Se houver comportamento causado por cache:
 npx expo start --clear
 ```
 
-## 4. Executar no navegador
+## 5. Executar no navegador
 
 ```bash
 npm run web
@@ -66,7 +90,7 @@ npm run web
 
 Também é possível executar `npm start` e pressionar `w`. A versão web usa React Native Web e o Metro Bundler.
 
-## 5. Executar em celular com Expo Go
+## 6. Executar em celular com Expo Go
 
 1. Instale o Expo Go no Android ou iOS.
 2. Conecte celular e computador à mesma rede.
@@ -77,7 +101,7 @@ O projeto usa Expo SDK 54, compatível com o fluxo atual do Expo Go documentado 
 
 Expo Go é suficiente para o MVP atual. Quando o projeto adicionar bibliotecas nativas não incluídas nele, será necessário criar um development build.
 
-## 6. Executar no Android
+## 7. Executar no Android
 
 Opções:
 
@@ -98,7 +122,7 @@ npm run android
 
 O guia oficial do emulador está em [Run apps on the Android Emulator](https://developer.android.com/studio/run/emulator).
 
-## 7. Executar no iOS
+## 8. Executar no iOS
 
 O simulador iOS local exige macOS e Xcode.
 
@@ -115,7 +139,7 @@ Consulte [Installing Xcode and Simulators](https://developer.apple.com/documenta
 
 Em Windows ou Linux, use um iPhone com Expo Go ou um build criado pelo EAS.
 
-## 8. Development build
+## 9. Development build
 
 Development builds serão necessários quando o aplicativo passar a usar módulos nativos fora do Expo Go, como determinados SDKs de mapas, autenticação ou notificações.
 
@@ -130,7 +154,7 @@ npx eas-cli@latest build --platform ios --profile development
 
 Essa dependência ainda não está instalada. Não execute a etapa antes de existir uma necessidade nativa. Veja [Introduction to development builds](https://docs.expo.dev/develop/development-builds/introduction/).
 
-## 9. Problemas comuns
+## 10. Problemas comuns
 
 ### Versão do Node incompatível
 

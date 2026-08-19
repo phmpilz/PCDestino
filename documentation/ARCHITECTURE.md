@@ -2,7 +2,7 @@
 
 ## Visão geral
 
-O PCD Destino é atualmente uma aplicação Expo gerenciada, escrita em React Native e TypeScript. Um único código atende Android, iOS e web.
+O PCD Destino combina uma aplicação Expo gerenciada, escrita em React Native e TypeScript, com uma API em .NET 10 e persistência PostgreSQL/PostGIS. Um único código mobile atende Android, iOS e web.
 
 ```mermaid
 flowchart TD
@@ -15,8 +15,9 @@ flowchart TD
     Components --> Types[src/types.ts]
     Data --> Types
     App --> Memory[Estado React em memória]
-    Memory -. futuro .-> API[API e autenticação]
-    API -. futuro .-> DB[Banco, busca geográfica e arquivos]
+    Memory -. integração pendente .-> API[ASP.NET Core API]
+    API --> Auth[Amazon Cognito]
+    API --> DB[PostgreSQL + PostGIS]
 ```
 
 Não há diretórios nativos `ios/` ou `android/` versionados. O Expo gera esses projetos durante prebuild ou EAS Build a partir de `app.json` e das dependências.
@@ -41,6 +42,7 @@ PCDestino/
 │   ├── theme.ts               # Cores e raios da identidade visual
 │   └── types.ts               # Tipos de domínio e ícones
 ├── assets/                    # Ícones, logotipo e materiais de loja
+├── backend/                   # API .NET, testes, contêineres e AWS CDK
 ├── docs/                      # Site público, termos, suporte e privacidade
 ├── documentation/             # Documentação técnica
 ├── fastlane/                  # Metadados e imagens das lojas
@@ -69,16 +71,16 @@ Essa estrutura é adequada para o MVP, mas deve ser modularizada quando novas te
 
 O estado usa hooks do React dentro de `App.tsx`. Os dados iniciais ficam em `src/data.ts`.
 
-Não existem atualmente:
+No aplicativo mobile ainda não existem:
 
 - Persistência local
 - Cache remoto
 - Sincronização
 - Sessão autenticada
 - Tratamento centralizado de erros
-- API ou repositórios de dados
+- Cliente da API ou repositórios de dados remotos
 
-Ao conectar o backend, componentes não devem acessar HTTP diretamente. A recomendação é introduzir uma camada de serviços/repositórios tipados e uma biblioteca de cache de servidor apenas quando a API estiver definida.
+Ao conectar a API já definida, componentes não devem acessar HTTP diretamente. Introduza uma camada de serviços/repositórios tipados e cache de servidor, mantendo os access tokens em armazenamento seguro da plataforma.
 
 ## Navegação
 
@@ -105,14 +107,17 @@ A navegação atual é uma máquina de estado simples baseada em `TabId`. Antes 
 - Dados em memória para validar produto e identidade antes da infraestrutura.
 - Continuous Native Generation para evitar manter projetos nativos sem necessidade.
 - Assets e metadados versionados para tornar releases reproduzíveis.
+- Monólito modular .NET para reduzir complexidade operacional sem misturar domínio e infraestrutura.
+- Cognito com Authorization Code + PKCE para não distribuir segredos no aplicativo.
+- PostgreSQL/PostGIS para integridade relacional e busca geográfica portável.
 
 ## Dívidas arquiteturais conhecidas
 
 - `App.tsx` concentra responsabilidades demais.
 - Não há navegação baseada em URL ou histórico.
-- Não há testes unitários, de componentes ou ponta a ponta.
+- O mobile ainda não possui testes unitários, de componentes ou ponta a ponta; o backend possui testes unitários e integrados.
 - O modelo `Place` é simplificado e mistura exibição com domínio.
 - Distância e localização são textos demonstrativos.
-- Pontuação e ranking não possuem regras auditáveis nem proteção contra abuso.
+- O livro-razão de pontos é auditável, mas ainda precisa de regras versionadas, limites e detecção de abuso.
 
 O plano para resolver essas limitações está em [Produto e próximos desenvolvimentos](PRODUCT_AND_BACKLOG.md).

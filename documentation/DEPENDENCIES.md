@@ -10,6 +10,11 @@
 | Expo SDK | `~54.0.0` | Toolchain e runtime multiplataforma |
 | React | `19.1.0` | Componentes e estado da interface |
 | React Native | `0.81.5` | Interface nativa Android e iOS |
+| .NET SDK | `10.0.400` em `global.json` | Compilação e testes do backend |
+| ASP.NET Core | `10` | API HTTP, autenticação e controles operacionais |
+| Entity Framework Core | `10.0.4` | Persistência e migrações |
+| PostgreSQL/PostGIS | `17 / 3.5` | Dados relacionais e consultas geográficas |
+| AWS CDK | `2.262.0` (biblioteca) | Infraestrutura AWS como código em C# |
 
 As versões exatas instaladas estão no `package-lock.json`. Não edite o lockfile manualmente.
 
@@ -34,13 +39,25 @@ As versões exatas instaladas estão no `package-lock.json`. Não edite o lockfi
 | `typescript` | Compilador e verificação estática |
 | `@types/react` | Tipos TypeScript para React |
 
-## Dependências que ainda não existem
+## Backend
+
+| Pacote | Responsabilidade |
+| --- | --- |
+| `Npgsql.EntityFrameworkCore.PostgreSQL` | Provedor PostgreSQL para EF Core |
+| `Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite` | Tipos e consultas PostGIS |
+| `Microsoft.AspNetCore.Authentication.JwtBearer` | Validação de access tokens Cognito |
+| `Microsoft.AspNetCore.OpenApi` | Contrato OpenAPI gerado pela aplicação |
+| `OpenTelemetry.*` | Métricas, traces e exportação OTLP opcional |
+| `Testcontainers.PostgreSql` | Banco PostGIS isolado nos testes integrados |
+| `Amazon.CDK.Lib` | ECS, Aurora, Cognito, VPC, WAF e observabilidade |
+
+## Dependências que ainda não existem no mobile
 
 O projeto não deve instalar bibliotecas antecipadamente. As categorias abaixo dependem das decisões de arquitetura e produto:
 
 - Navegação e deep links
 - Cliente HTTP e cache de dados remotos
-- Autenticação e armazenamento seguro de tokens
+- Cliente Cognito/OIDC e armazenamento seguro de tokens
 - Mapas, geocodificação e localização em segundo plano
 - Upload, compressão e exibição de fotos
 - Notificações push

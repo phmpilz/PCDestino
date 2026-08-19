@@ -107,12 +107,16 @@ Endereço configurado:
 
 Confirme os links após cada alteração nas páginas públicas.
 
+## Backend AWS
+
+O workflow `.github/workflows/backend-deploy.yml` publica a API por acionamento manual e exige confirmação textual e aprovação do GitHub Environment `production`. A autenticação na AWS usa OIDC e credenciais temporárias. Consulte [Implantação do backend na AWS](AWS_BACKEND.md) antes do primeiro deploy.
+
 ## Checklist de release
 
 1. Escopo aprovado e documentação atualizada.
 2. `npm run validate` aprovado localmente e no GitHub.
 3. Testes manuais e de acessibilidade concluídos.
-4. Migrações e rollback testados, quando houver backend.
+4. Migrações e rollback do backend testados.
 5. Política de privacidade e declarações das lojas revisadas.
 6. Build `preview` homologado.
 7. Build `production` gerado e identificado.

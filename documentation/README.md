@@ -8,6 +8,8 @@ Este diretório descreve o estado atual do PCD Destino e serve como ponto de par
 | --- | --- |
 | [Instalação e execução](SETUP.md) | Pré-requisitos, preparação do ambiente e execução em cada plataforma |
 | [Arquitetura](ARCHITECTURE.md) | Estrutura do código, fluxo de dados, estado e decisões atuais |
+| [Backend e API](BACKEND.md) | Arquitetura .NET 10, autenticação, banco, endpoints e configuração |
+| [Implantação do backend na AWS](AWS_BACKEND.md) | Infraestrutura, segurança, GitHub OIDC, deploy e operação |
 | [Tecnologias e dependências](DEPENDENCIES.md) | Stack, versões, finalidade de cada pacote e manutenção |
 | [Testes e qualidade](TESTING.md) | Comandos, integração contínua, testes manuais e lacunas atuais |
 | [Produto e próximos desenvolvimentos](PRODUCT_AND_BACKLOG.md) | Escopo funcional, backend necessário, modelo de dados e roadmap |
@@ -18,7 +20,7 @@ Este diretório descreve o estado atual do PCD Destino e serve como ponto de par
 
 - Primeira contribuição: `SETUP.md`, `ARCHITECTURE.md`, `TESTING.md` e `CONTRIBUTING.md`
 - Desenvolvimento mobile: `SETUP.md`, `DEPENDENCIES.md` e `ARCHITECTURE.md`
-- Backend e produto: `PRODUCT_AND_BACKLOG.md` e `ACCESSIBILITY_AND_PRIVACY.md`
+- Backend e produto: `BACKEND.md`, `AWS_BACKEND.md`, `PRODUCT_AND_BACKLOG.md` e `ACCESSIBILITY_AND_PRIVACY.md`
 - Publicação: `RELEASE.md` e `store-submission/STORE_CHECKLIST.md`
 - Design: `BRAND.md` e `ACCESSIBILITY_AND_PRIVACY.md`
 
@@ -28,6 +30,7 @@ Este diretório descreve o estado atual do PCD Destino e serve como ponto de par
 - Configuração Expo: `app.json`
 - Perfis de build: `eas.json`
 - Automação: `.github/workflows/`
+- Backend e infraestrutura: `backend/`
 - Materiais das lojas: `fastlane/` e `assets/store/`
 - Requisitos pendentes de publicação: `store-submission/STORE_CHECKLIST.md`
 

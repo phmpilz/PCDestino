@@ -6,9 +6,9 @@ Central colaborativa multiplataforma para pessoas com deficiência encontrarem e
 
 ## Estado do projeto
 
-O repositório contém um MVP navegável para Android, iOS e web. A interface, a identidade visual, o fluxo de contribuição e a gamificação estão demonstrados com dados locais em memória.
+O repositório contém um MVP navegável para Android, iOS e web e um backend funcional em .NET 10. A API implementa persistência geográfica, autenticação, moderação, favoritos, avaliações e gamificação. A interface mobile ainda usa dados demonstrativos e será conectada aos contratos da API na próxima etapa.
 
-Ainda não existem backend, autenticação, banco de dados, mapas reais, upload de imagens ou moderação. Esses itens estão detalhados em [Produto e próximos desenvolvimentos](documentation/PRODUCT_AND_BACKLOG.md).
+Uploads de imagens, mapas visuais, notificações e o painel administrativo permanecem no roadmap em [Produto e próximos desenvolvimentos](documentation/PRODUCT_AND_BACKLOG.md).
 
 ## Funcionalidades demonstradas
 
@@ -32,6 +32,9 @@ Ainda não existem backend, autenticação, banco de dados, mapas reais, upload 
 - React Native Web
 - Expo Application Services (EAS) para builds e submissão
 - GitHub Actions para validação e GitHub Pages
+- .NET 10 e ASP.NET Core Minimal APIs
+- Entity Framework Core 10, PostgreSQL 17 e PostGIS
+- Amazon Cognito, ECS Fargate, Aurora PostgreSQL, WAF e AWS CDK
 
 Consulte [Tecnologias e dependências](documentation/DEPENDENCIES.md) para versões, responsabilidades e critérios de atualização.
 
@@ -53,6 +56,14 @@ npm start
 
 Com o servidor aberto, escaneie o QR Code usando o Expo Go ou pressione `w` para abrir a versão web. Para Android e iOS, consulte [Instalação e execução](documentation/SETUP.md).
 
+Para iniciar a API .NET e o PostgreSQL/PostGIS em contêineres:
+
+```bash
+docker compose -f backend/compose.yaml up --build
+```
+
+A API ficará em `http://localhost:5205`. Consulte [Backend e API](documentation/BACKEND.md) para autenticação local, endpoints e migrações.
+
 ## Comandos principais
 
 | Comando | Finalidade |
@@ -72,6 +83,8 @@ Com o servidor aberto, escaneie o QR Code usando o Expo Go ou pressione `w` para
 - [Índice da documentação](documentation/README.md)
 - [Instalação e execução](documentation/SETUP.md)
 - [Arquitetura](documentation/ARCHITECTURE.md)
+- [Backend e API](documentation/BACKEND.md)
+- [Implantação do backend na AWS](documentation/AWS_BACKEND.md)
 - [Tecnologias e dependências](documentation/DEPENDENCIES.md)
 - [Testes e qualidade](documentation/TESTING.md)
 - [Produto e próximos desenvolvimentos](documentation/PRODUCT_AND_BACKLOG.md)
@@ -87,6 +100,7 @@ A branch `main` é protegida e todas as mudanças devem passar por Pull Request.
 
 ```bash
 npm run validate
+dotnet test backend/PCDestino.Backend.sln --configuration Release
 ```
 
 Veja o processo completo em [CONTRIBUTING.md](CONTRIBUTING.md).

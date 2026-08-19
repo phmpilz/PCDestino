@@ -6,7 +6,7 @@ Ser uma referência confiável por cidade para pessoas com deficiência encontra
 
 ## Estado do MVP
 
-O MVP valida a experiência visual e os principais fluxos. Todos os nomes, avaliações, distâncias, usuários, pontos e locais são demonstrativos. Nenhum cadastro é enviado a um servidor.
+O MVP mobile valida a experiência visual e ainda usa dados demonstrativos. O repositório já possui uma API .NET 10 funcional para cidades, locais, avaliações, favoritos, ranking e moderação, mas o aplicativo ainda precisa ser conectado a ela.
 
 ## Capacidades necessárias para produção
 
@@ -95,21 +95,19 @@ As entidades abaixo são uma proposta a ser validada antes da implementação:
 | `Achievement` | Critério e conquista do usuário |
 | `AuditLog` | Ações administrativas relevantes |
 
-## API e infraestrutura
+## API e infraestrutura implementadas
 
-O backend deve fornecer:
+O backend já fornece:
 
 - API autenticada e versionada
 - Autorização por recurso, não apenas por tela
 - Banco relacional com suporte geoespacial
 - Busca textual e geográfica
-- Armazenamento de mídia com URLs temporárias
-- Processamento assíncrono para imagens, moderação e notificações
-- Rate limiting, idempotência e proteção contra automação abusiva
-- Ambientes separados de desenvolvimento, homologação e produção
-- Migrações versionadas e reversíveis
+- Rate limiting e proteção WAF contra automação abusiva
+- Migrações versionadas e execução isolada em deploy
+- Infraestrutura AWS reproduzível com Cognito, Fargate e Aurora/PostGIS
 
-Nenhum provedor foi escolhido. A decisão deve comparar custo, residência e proteção dos dados, acessibilidade do painel, portabilidade, suporte geográfico e capacidade operacional da equipe.
+Ainda precisam ser implementados armazenamento de mídia com URLs temporárias, processamento assíncrono, idempotência formal, homologação independente e integrações mobile. As decisões atuais e o procedimento de publicação estão em [Backend e API](BACKEND.md) e [Implantação do backend na AWS](AWS_BACKEND.md).
 
 ## Roadmap recomendado
 

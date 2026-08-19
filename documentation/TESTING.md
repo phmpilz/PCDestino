@@ -2,7 +2,7 @@
 
 ## Situação atual
 
-O MVP possui validação automatizada de tipos, compatibilidade de dependências e geração web. Ainda não há testes unitários, testes de componentes nem testes ponta a ponta.
+O mobile possui validação automatizada de tipos, compatibilidade de dependências e geração web. O backend possui testes unitários do domínio e testes integrados que iniciam PostgreSQL/PostGIS real com Testcontainers. Ainda não há testes de componentes mobile nem testes ponta a ponta.
 
 Por compatibilidade com ferramentas de CI, `npm test` executa a suíte automatizada disponível hoje: a verificação TypeScript. Isso não substitui os testes de comportamento que devem ser adicionados antes da produção.
 
@@ -34,7 +34,15 @@ npm run build:web
 
 O resultado é criado em `dist/`, que não deve ser versionado.
 
-### Validação completa
+### Backend
+
+```bash
+dotnet test backend/PCDestino.Backend.sln --configuration Release
+```
+
+Os testes integrados exigem Docker ativo e suporte a imagens `linux/amd64`. Eles aplicam a migração real, carregam dados iniciais e exercitam saúde, catálogo, pesquisa e autenticação; o contêiner de teste é descartável.
+
+### Validação completa do mobile
 
 ```bash
 npm run validate
@@ -51,6 +59,8 @@ Toda Pull Request para `main` executa o job obrigatório `quality` no GitHub Act
 3. Compatibilidade das dependências Expo
 4. Verificação TypeScript
 5. Exportação web
+6. Restauração e build .NET 10
+7. Testes unitários e integrados do backend
 
 A `main` não pode receber mudanças enquanto esse job falhar.
 
@@ -108,7 +118,7 @@ Teste em Android, iOS e web sempre que possível.
 
 Antes do piloto:
 
-- Testes unitários para pontuação, filtros e regras de gamificação
+- Ampliar testes unitários para filtros e regras antifraude da gamificação
 - Testes de componentes para busca, cartões, favoritos e formulários
 - Testes de contrato entre aplicativo e API
 - Testes de acessibilidade automatizados onde houver suporte
@@ -116,8 +126,8 @@ Antes do piloto:
 Antes da produção:
 
 - Testes ponta a ponta dos fluxos críticos
-- Testes de API, autorização e moderação
-- Testes de migração do banco de dados
+- Ampliar testes de autorização e moderação
+- Testar migrações incrementais e recuperação de falhas
 - Testes de carga para busca geográfica e envio de mídia
 - Testes de segurança e abuso da gamificação
 - Matriz de dispositivos e versões mínimas suportadas

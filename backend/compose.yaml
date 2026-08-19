@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    environment:
+      POSTGRES_DB: pcdestino
+      POSTGRES_USER: pcdestino
+      POSTGRES_PASSWORD: pcdestino
+    ports:
+      - "5432:5432"
+    volumes:
+      - pcdestino-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pcdestino -d pcdestino"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__Default: Host=postgres;Port=5432;Database=pcdestino;Username=pcdestino;Password=pcdestino;Include Error Detail=true
+      Database__RunMigrationsOnStartup: "true"
+      Database__SeedDemoData: "true"
+      Authentication__Mode: Development
+    ports:
+      - "5205:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pcdestino-postgres:

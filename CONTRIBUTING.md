@@ -25,6 +25,7 @@ Antes do commit:
 
 ```bash
 npm run validate
+dotnet test backend/PCDestino.Backend.sln --configuration Release
 ```
 
 Faça commits pequenos e descritivos, publique a branch e abra uma Pull Request usando o modelo do repositório.
@@ -45,6 +46,8 @@ O job obrigatório `quality` e a revisão devem ser concluídos antes do merge. 
 ## Padrões de código
 
 - Use TypeScript e evite `any` sem justificativa.
+- Mantenha o backend em .NET 10, com dependências apontando para dentro: API → infraestrutura/aplicação → domínio.
+- Gere toda mudança de esquema por migração EF Core e teste-a em PostgreSQL/PostGIS.
 - Prefira componentes pequenos e responsabilidades claras.
 - Centralize cores e tokens em `src/theme.ts`.
 - Preserve rótulos, papéis, estados e ordem de foco acessíveis.
@@ -61,6 +64,12 @@ npx expo install nome-do-pacote
 ```
 
 Inclua `package.json` e `package-lock.json` na mesma PR. Execute `npm run check:deps` e teste todas as plataformas afetadas.
+
+Para pacotes .NET, justifique a necessidade, use uma versão estável compatível com .NET 10 e execute a auditoria:
+
+```bash
+dotnet list backend/PCDestino.Backend.sln package --vulnerable --include-transitive
+```
 
 ## Conteúdo e dados
 

@@ -25,3 +25,13 @@ jobs:
         run: npm ci
       - name: Validate project
         run: npm run validate
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore backend
+        run: dotnet restore backend/PCDestino.Backend.sln
+      - name: Build backend
+        run: dotnet build backend/PCDestino.Backend.sln --configuration Release --no-restore
+      - name: Test backend
+        run: dotnet test backend/PCDestino.Backend.sln --configuration Release --no-build --logger "trx;LogFileName=backend-tests.trx"
