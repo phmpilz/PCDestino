@@ -1,0 +1,31 @@
+@host = http://localhost:5205
+@cityId = replace-after-getting-cities
+@placeId = replace-after-getting-places
+
+GET {{host}}/health/live
+Accept: application/json
+
+###
+
+GET {{host}}/api/v1/catalog/cities
+Accept: application/json
+
+###
+
+GET {{host}}/api/v1/places?cityId={{cityId}}&page=1&pageSize=20
+Accept: application/json
+
+###
+
+GET {{host}}/api/v1/me
+Accept: application/json
+X-Dev-User-Id: local-user
+X-Dev-User-Name: Pessoa Desenvolvedora
+
+###
+
+GET {{host}}/api/v1/moderation/queue
+Accept: application/json
+X-Dev-User-Id: local-moderator
+X-Dev-User-Name: Moderador Local
+X-Dev-Groups: Moderator

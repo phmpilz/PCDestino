@@ -1,0 +1,6 @@
+{
+  "app": "dotnet run --project infra/PCDestino.Aws/PCDestino.Aws.csproj",
+  "context": {
+    "sourcePath": ".."
+  }
+}

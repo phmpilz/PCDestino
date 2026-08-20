@@ -1,0 +1,84 @@
+name: Deploy backend to AWS
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Digite deploy-production para confirmar"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: backend-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: inputs.confirm == 'deploy-production'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.x
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 20
+      - name: Configure short-lived AWS credentials
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Restore tools and dependencies
+        run: |
+          dotnet restore backend/PCDestino.Backend.sln
+          dotnet tool restore --tool-manifest backend/dotnet-tools.json
+      - name: Test backend
+        run: dotnet test backend/PCDestino.Backend.sln --configuration Release
+      - name: Deploy CDK stack
+        working-directory: backend
+        run: >-
+          npx --yes aws-cdk@2.1138.0 deploy PCDestino-Backend
+          --require-approval never
+          --parameters CertificateArn=${{ vars.AWS_CERTIFICATE_ARN }}
+      - name: Apply database migrations in a one-off ECS task
+        shell: bash
+        run: |
+          output() {
+            aws cloudformation describe-stacks \
+              --stack-name PCDestino-Backend \
+              --query "Stacks[0].Outputs[?OutputKey=='$1'].OutputValue" \
+              --output text
+          }
+
+          cluster="$(output EcsClusterName)"
+          task_definition="$(output TaskDefinitionArn)"
+          container="$(output ContainerName)"
+          subnets="$(output ApplicationSubnetIds)"
+          security_group="$(output ServiceSecurityGroupId)"
+          overrides="{\"containerOverrides\":[{\"name\":\"${container}\",\"command\":[\"migrate\"]}]}"
+
+          task_arn="$(aws ecs run-task \
+            --cluster "$cluster" \
+            --task-definition "$task_definition" \
+            --launch-type FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[$subnets],securityGroups=[$security_group],assignPublicIp=DISABLED}" \
+            --overrides "$overrides" \
+            --query 'tasks[0].taskArn' \
+            --output text)"
+
+          aws ecs wait tasks-stopped --cluster "$cluster" --tasks "$task_arn"
+          exit_code="$(aws ecs describe-tasks \
+            --cluster "$cluster" \
+            --tasks "$task_arn" \
+            --query 'tasks[0].containers[0].exitCode' \
+            --output text)"
+          test "$exit_code" = "0"

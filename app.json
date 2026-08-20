@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "PCD Destino",
+    "slug": "pcd-destino",
+    "scheme": "pcdestino",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F4F7F2"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.pcddestino.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "PCD Destino",
+        "NSLocationWhenInUseUsageDescription": "Sua localização permite encontrar serviços e locais acessíveis próximos a você."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#173F35"
+      },
+      "package": "br.com.pcddestino.app",
+      "versionCode": 1,
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png",
+      "name": "PCD Destino",
+      "shortName": "PCD Destino",
+      "lang": "pt-BR",
+      "themeColor": "#173F35",
+      "backgroundColor": "#F4F7F2"
+    }
+  }
+}

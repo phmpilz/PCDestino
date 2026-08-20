@@ -1,0 +1,123 @@
+# Arquitetura
+
+## Visão geral
+
+O PCD Destino combina uma aplicação Expo gerenciada, escrita em React Native e TypeScript, com uma API em .NET 10 e persistência PostgreSQL/PostGIS. Um único código mobile atende Android, iOS e web.
+
+```mermaid
+flowchart TD
+    Entry[index.js] --> App[App.tsx]
+    App --> Screens[Telas e fluxos]
+    App --> Components[src/components.tsx]
+    App --> Data[src/data.ts]
+    Screens --> Components
+    Components --> Theme[src/theme.ts]
+    Components --> Types[src/types.ts]
+    Data --> Types
+    App --> Memory[Estado React em memória]
+    Memory -. integração pendente .-> API[ASP.NET Core API]
+    API --> Auth[Amazon Cognito]
+    API --> DB[PostgreSQL + PostGIS]
+```
+
+Não há diretórios nativos `ios/` ou `android/` versionados. O Expo gera esses projetos durante prebuild ou EAS Build a partir de `app.json` e das dependências.
+
+## Fluxo de inicialização
+
+1. `index.js` registra o componente raiz com `registerRootComponent`.
+2. `App.tsx` cria o `SafeAreaProvider` e o estado da sessão demonstrativa.
+3. A navegação inferior troca a tela ativa sem uma biblioteca de rotas.
+4. Busca, favoritos, detalhes e contribuição alteram apenas estado local.
+5. Fechar ou recarregar o aplicativo restaura os dados demonstrativos.
+
+## Organização de arquivos
+
+```text
+PCDestino/
+├── App.tsx                    # Telas, navegação e estado do MVP
+├── index.js                   # Entrada da aplicação Expo
+├── src/
+│   ├── components.tsx         # Componentes reutilizáveis
+│   ├── data.ts                # Dados demonstrativos
+│   ├── theme.ts               # Cores e raios da identidade visual
+│   └── types.ts               # Tipos de domínio e ícones
+├── assets/                    # Ícones, logotipo e materiais de loja
+├── backend/                   # API .NET, testes, contêineres e AWS CDK
+├── docs/                      # Site público, termos, suporte e privacidade
+├── documentation/             # Documentação técnica
+├── fastlane/                  # Metadados e imagens das lojas
+├── store-submission/          # Checklist operacional das lojas
+├── app.json                   # Configuração Expo por plataforma
+├── eas.json                   # Perfis de build e submissão
+└── .github/workflows/         # Qualidade e GitHub Pages
+```
+
+## Camada de apresentação
+
+`App.tsx` contém as telas atuais:
+
+- Início
+- Explorar
+- Ranking
+- Perfil
+- Detalhe de local
+- Modal de contribuição
+
+`src/components.tsx` concentra elementos reutilizáveis, como busca, categorias, cartões de local, botões, badges e cabeçalhos de seção.
+
+Essa estrutura é adequada para o MVP, mas deve ser modularizada quando novas telas forem implementadas. A evolução recomendada é separar `features/`, `screens/`, `navigation/`, `services/`, `hooks/` e `state/`.
+
+## Estado e dados
+
+O estado usa hooks do React dentro de `App.tsx`. Os dados iniciais ficam em `src/data.ts`.
+
+No aplicativo mobile ainda não existem:
+
+- Persistência local
+- Cache remoto
+- Sincronização
+- Sessão autenticada
+- Tratamento centralizado de erros
+- Cliente da API ou repositórios de dados remotos
+
+Ao conectar a API já definida, componentes não devem acessar HTTP diretamente. Introduza uma camada de serviços/repositórios tipados e cache de servidor, mantendo os access tokens em armazenamento seguro da plataforma.
+
+## Navegação
+
+A navegação atual é uma máquina de estado simples baseada em `TabId`. Antes de adicionar deep links, notificações, autenticação e rotas aninhadas, adote uma solução de navegação compatível com Expo e documente a decisão em uma ADR.
+
+## Configuração por plataforma
+
+`app.json` define:
+
+- Nome e slug
+- Versão do aplicativo
+- Ícones e splash
+- Bundle ID iOS e package Android: `br.com.pcddestino.app`
+- Mensagem de permissão de localização no iOS
+- Comportamento visual Android
+- Configurações web
+
+`eas.json` possui os perfis `development`, `preview` e `production`.
+
+## Decisões atuais
+
+- Um código React Native para reduzir divergência entre plataformas.
+- TypeScript estrito para detectar incompatibilidades antes do build.
+- Dados em memória para validar produto e identidade antes da infraestrutura.
+- Continuous Native Generation para evitar manter projetos nativos sem necessidade.
+- Assets e metadados versionados para tornar releases reproduzíveis.
+- Monólito modular .NET para reduzir complexidade operacional sem misturar domínio e infraestrutura.
+- Cognito com Authorization Code + PKCE para não distribuir segredos no aplicativo.
+- PostgreSQL/PostGIS para integridade relacional e busca geográfica portável.
+
+## Dívidas arquiteturais conhecidas
+
+- `App.tsx` concentra responsabilidades demais.
+- Não há navegação baseada em URL ou histórico.
+- O mobile ainda não possui testes unitários, de componentes ou ponta a ponta; o backend possui testes unitários e integrados.
+- O modelo `Place` é simplificado e mistura exibição com domínio.
+- Distância e localização são textos demonstrativos.
+- O livro-razão de pontos é auditável, mas ainda precisa de regras versionadas, limites e detecção de abuso.
+
+O plano para resolver essas limitações está em [Produto e próximos desenvolvimentos](PRODUCT_AND_BACKLOG.md).

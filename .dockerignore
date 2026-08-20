@@ -1,0 +1,14 @@
+.git
+.github
+.expo
+.openai
+node_modules
+dist
+backend/**/bin
+backend/**/obj
+backend/TestResults
+backend/cdk.out
+*.user
+*.suo
+*.log
+.DS_Store
